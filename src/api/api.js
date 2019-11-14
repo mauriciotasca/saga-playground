@@ -44,11 +44,11 @@ export function callApi(endpoint, schema) {
 
 
 // Schemas for Github API responses.
-const userSchema = new schema.Entity('users', {}, {
+export const userSchema = new schema.Entity('users', {}, {
     idAttribute: 'login',
 });
 
-const repoSchema = new schema.Entity('repos', {},{
+export const repoSchema = new schema.Entity('repos', {},{
     idAttribute: 'fullName',
 });
 
@@ -60,8 +60,8 @@ repoSchema.define({
 const repoSchemaArray = new schema.Array(repoSchema);
 
 // api services
-// export const fetchPersonApiService = personId => callApi(`people/${personId}`, personSchema);
+// export const fetchPersonApiService = personId => callApi(`peopleReducer/${personId}`, personSchema);
 export const fetchPersonApiService = personId => callApi(`users/mauriciotasca`, userSchema);
 
-// export const fetchPeopleApiService = name => callApi(`people?name=${name}`, personSchemaArray);
+// export const fetchPeopleApiService = name => callApi(`peopleReducer?name=${name}`, personSchemaArray);
 export const fetchPeopleApiService = name => callApi(`users/mauriciotasca/repos`, repoSchemaArray);

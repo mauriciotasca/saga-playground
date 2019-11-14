@@ -1,28 +1,35 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { fetchPeopleApiService, fetchPersonApiService } from '../api';
+import {
+    fetchPersonFailed,
+    fetchPersonSucceeded, fetchReposFailed,
+    fetchReposSucceeded
+} from '../actions';
+
+import actionTypes from '../types';
 
 function* fetchPerson(action) {
     try {
-        const person = yield call(fetchPersonApiService, action.payload.personId);
-        yield put({ type: 'PERSON_FETCH_SUCCEEDED', payload: person });
+        const responseWrapper = yield call(fetchPersonApiService, action.payload.personId);
+        yield put(fetchPersonSucceeded(responseWrapper));
     } catch (e) {
-        yield put({ type: 'PERSON_FETCH_FAILED', message: e.message });
+        yield put(fetchPersonFailed(e.message));
     }
 }
 
 function* fetchPeople(action) {
     try {
-        const personMap = yield call(fetchPeopleApiService, action.payload.name);
-        yield put({ type: 'PEOPLE_FETCH_SUCCEEDED', payload: personMap });
+        const responseWrapper = yield call(fetchPeopleApiService, action.payload.name);
+        yield put(fetchReposSucceeded(responseWrapper));
     } catch (e) {
-        yield put({ type: 'PEOPLE_FETCH_FAILED', message: e.message });
+        yield put(fetchReposFailed(e.message));
     }
 }
 
 export function* personSaga() {
-    yield takeLatest('PERSON_FETCH_REQUESTED', fetchPerson);
+    yield takeLatest(actionTypes.PERSON_FETCH_REQUESTED, fetchPerson);
 }
 
 export function* peopleSaga() {
-    yield takeLatest('PEOPLE_FETCH_REQUESTED', fetchPeople);
+    yield takeLatest(actionTypes.PEOPLE_FETCH_REQUESTED, fetchPeople);
 }
